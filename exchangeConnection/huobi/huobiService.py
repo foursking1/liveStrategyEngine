@@ -252,6 +252,9 @@ def getMinimumOrderQty(coinType):
 最小交易金额：1
 '''
 
-
 def getMinimumOrderCashAmount():
     return 1
+
+
+if __name__ == '__main__':
+    pass

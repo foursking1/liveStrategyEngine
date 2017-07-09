@@ -5,7 +5,7 @@
 # @Link    : https://www.huobi.com
 # @Version : $Id$
 
-from utilETH import *
+from exchangeConnection.huobi.utilETH import *
 
 '''
 Market data API
@@ -96,7 +96,7 @@ def get_balance(acct_id=None):
 
     if not acct_id:
         accounts = get_accounts()
-        acct_id = accounts['data'][0]['id'];
+        acct_id = accounts['data'][0]['id']
 
     url = "/v1/account/accounts/{0}/balance".format(acct_id)
     params = {"account-id": acct_id}
