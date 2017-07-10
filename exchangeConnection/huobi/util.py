@@ -27,6 +27,9 @@ ORDER_ID_BY_TRADE_ID = "get_order_id_by_trade_id"
 SELL = "sell"
 SELL_MARKET = "sell_market"
 
+CNY_MARKET = "cny"
+USD_MARKET = "usd"
+
 '''
 发送信息到api
 '''

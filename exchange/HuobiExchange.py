@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 __author__ = 'foursking'
 from exchange.subject import *
 from trade.Account import Account
 from trade.Ticker import Ticker
 from trade.Depth import Depth
 from trade.MarketOrder import MarketOrder
+from trade.Order import *
 
 import exchangeConnection.huobi.huobiService as HuobiService
 from exchangeConnection.huobi.util import *
@@ -104,14 +106,148 @@ class HuobiExchange:
     def get_trades(self):
         pass
 
+    def get_orders(self):
+        orders = []
+        ## todo: 只支持人民币市场
+        if self.subject == CNY_BTC:
+            res = HuobiService.getOrders(HUOBI_COIN_TYPE_BTC, CNY_MARKET, GET_ORDERS)
+            for raw_orders in res:
+                order = Order()
+                order.Id = raw_orders['id']
+                order.Amount = float(raw_orders['order_amount'])
+                order.DealAmount = float(raw_orders['processed_amount'])
+                order.Status = ORDER_STATE_PENDING
+                order.Prices = float(raw_orders['order_price'])
+                if raw_orders['type'] == 1:
+                    order.Type = ORDER_TYPE_BUY
+                elif raw_orders['type'] == 2:
+                    order.Type = ORDER_TYPE_SELL
+                orders.append(order)
+        if self.subject == CNY_LTC:
+            res = HuobiService.getOrders(HUOBI_COIN_TYPE_LTC, CNY_MARKET, GET_ORDERS)
+            for raw_orders in res:
+                order = Order()
+                order.Id = raw_orders['id']
+                order.Amount = float(raw_orders['order_amount'])
+                order.DealAmount = float(raw_orders['processed_amount'])
+                order.Status = ORDER_STATE_PENDING
+                order.Prices = float(raw_orders['order_price'])
+                if raw_orders['type'] == 1:
+                    order.Type = ORDER_TYPE_BUY
+                elif raw_orders['type'] == 2:
+                    order.Type = ORDER_TYPE_SELL
+                orders.append(order)
+        return orders
+
+    def get_order_info(self, id):
+        order = Order()
+        if self.subject == CNY_BTC:
+            res = HuobiService.getOrderInfo(HUOBI_COIN_TYPE_BTC, id, CNY_MARKET, ORDER_INFO)
+            order.Id = res['id']
+            order.Amount = float(res['order_amount'])
+            order.DealAmount = float(res['processed_amount'])
+            order.Status = ORDER_STATE_PENDING
+            order.Prices = float(res['order_price'])
+            if res['type'] == 1:
+                order.Type = ORDER_TYPE_BUY
+            elif res['type'] == 2:
+                order.Type = ORDER_TYPE_SELL
+
+        if self.subject == CNY_LTC:
+            res = HuobiService.getOrderInfo(HUOBI_COIN_TYPE_LTC, id, CNY_MARKET, ORDER_INFO)
+            order.Id = res['id']
+            order.Amount = float(res['order_amount'])
+            order.DealAmount = float(res['processed_amount'])
+            order.Status = ORDER_STATE_PENDING
+            order.Prices = float(res['order_price'])
+            if res['type'] == 1:
+                order.Type = ORDER_TYPE_BUY
+            elif res['type'] == 2:
+                order.Type = ORDER_TYPE_SELL
+        return order
+
+    def sell(self, prices, amount, limit=True):
+        if self.subject == CNY_BTC:
+            res = HuobiService.sell(HUOBI_COIN_TYPE_BTC, prices, amount, None, None, CNY_MARKET, SELL)
+            if res['result'] == "success":
+                return res['id']
+            else:
+                return -1
+        if self.subject == CNY_LTC:
+            res = HuobiService.sell(HUOBI_COIN_TYPE_LTC, prices, amount, None, None, CNY_MARKET, SELL)
+            if res['result'] == "success":
+                return res['id']
+            else:
+                return -1
+
+    def buy(self, prices, amount, limit=True):
+        if self.subject == CNY_BTC:
+            if limit is True:
+                res = HuobiService.buy(HUOBI_COIN_TYPE_BTC, prices, amount, None, None, CNY_MARKET, BUY)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
+            elif limit is False:
+                res = HuobiService.buyMarket(HUOBI_COIN_TYPE_BTC, amount, None, None, CNY_MARKET, BUY_MARKET)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
+
+        if self.subject == CNY_LTC:
+            if limit is True:
+                res = HuobiService.buy(HUOBI_COIN_TYPE_LTC, prices, amount, None, None, CNY_MARKET, BUY)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
+            elif limit is False:
+                res = HuobiService.buyMarket(HUOBI_COIN_TYPE_LTC, amount, None, None, CNY_MARKET, BUY_MARKET)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
+
+    def cancel_order(self, id):
+        if self.subject == CNY_BTC:
+            res = HuobiService.cancelOrder(HUOBI_COIN_TYPE_BTC, id, CNY_MARKET, CANCEL_ORDER)
+            if res['result'] == 'success':
+                return True
+            else:
+                return False
+        if self.subject == CNY_LTC:
+            res = HuobiService.cancelOrder(HUOBI_COIN_TYPE_LTC, id, CNY_MARKET, CANCEL_ORDER)
+            if res['result'] == 'success':
+                return True
+            else:
+                return False
+
+    def cancel_all(self):
+        if self.subject == CNY_BTC:
+            pass
+
+
+
+
+
 if __name__ == '__main__':
     exchange = HuobiExchange()
+    exchange.switch_subject(CNY_LTC)
     account_info = exchange.get_account()
     ticker_info = exchange.get_ticker()
     depth_info = exchange.get_depth()
+    orders = exchange.get_orders()
     print(account_info)
     print(ticker_info)
     print(depth_info)
+    for order in orders:
+        print(order)
+        print(exchange.get_order_info(order.Id))
+    id = exchange.buy(1, 0.01)
+    print(exchange.get_order_info(id))
+
+
 
 
 
