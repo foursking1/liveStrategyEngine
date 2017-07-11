@@ -8,8 +8,11 @@ from trade.MarketOrder import MarketOrder
 from trade.Order import *
 
 import exchangeConnection.huobi.huobiService as HuobiService
+import exchangeConnection.huobi.huobiServiceETH as HuobiServiceETH
 from exchangeConnection.huobi.util import *
+from exchangeConnection.huobi.utilETH import *
 from utils.helper import *
+
 
 class HuobiExchange:
 
@@ -36,16 +39,28 @@ class HuobiExchange:
         account = Account()
         if self.subject == CNY_BTC:
             res = HuobiService.getAccountInfo("cny", ACCOUNT_INFO)
-            account.Balance = res['available_cny_display']
-            account.Stocks = res['available_btc_display']
-            account.FrozenBalance = res["frozen_cny_display"]
-            account.FrozenStocks = res["frozen_btc_display"]
+            account.Balance = float(res['available_cny_display'])
+            account.Stocks = float(res['available_btc_display'])
+            account.FrozenBalance = float(res["frozen_cny_display"])
+            account.FrozenStocks = float(res["frozen_btc_display"])
         if self.subject == CNY_LTC:
             res = HuobiService.getAccountInfo("cny", ACCOUNT_INFO)
-            account.Balance = res['available_cny_display']
-            account.Stocks = res['available_ltc_display']
-            account.FrozenBalance = res["frozen_cny_display"]
-            account.FrozenStocks = res["frozen_ltc_display"]
+            account.Balance = float(res['available_cny_display'])
+            account.Stocks = float(res['available_ltc_display'])
+            account.FrozenBalance = float(res["frozen_cny_display"])
+            account.FrozenStocks = float(res["frozen_ltc_display"])
+        if self.subject == CNY_ETH:
+            res = HuobiServiceETH.get_balance()
+            for item in res['data']['list']:
+                if item['currency'] == 'cny' and item['type'] == 'trade':
+                    account.Balance = float(item['balance'])
+                elif item['currency'] == 'cny' and item['type'] == 'frozen':
+                    account.FrozenBalance = float(item['balance'])
+                elif item['currency'] == 'eth' and item['type'] == 'trade':
+                    account.Stocks = float(item['balance'])
+                elif item['currency'] == 'eth' and item['type'] == 'frozen':
+                    account.FrozenStocks = float(item['balance'])
+
         return account
 
     def get_ticker(self):
@@ -72,6 +87,8 @@ class HuobiExchange:
             ticker.Last = res['ticker']['last']
             assert res['ticker']['symbol'] == "ltccny"
 
+        if self.subject == CNY_ETH:
+            pass
         return ticker
 
     def get_depth(self, depth_size=5):
@@ -168,17 +185,31 @@ class HuobiExchange:
 
     def sell(self, prices, amount, limit=True):
         if self.subject == CNY_BTC:
-            res = HuobiService.sell(HUOBI_COIN_TYPE_BTC, prices, amount, None, None, CNY_MARKET, SELL)
-            if res['result'] == "success":
-                return res['id']
+            if limit is True:
+                res = HuobiService.sell(HUOBI_COIN_TYPE_BTC, prices, amount, None, None, CNY_MARKET, SELL)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
             else:
-                return -1
+                res = HuobiService.sellMarket(HUOBI_COIN_TYPE_BTC, amount, None, None, CNY_MARKET, SELL_MARKET)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
         if self.subject == CNY_LTC:
-            res = HuobiService.sell(HUOBI_COIN_TYPE_LTC, prices, amount, None, None, CNY_MARKET, SELL)
-            if res['result'] == "success":
-                return res['id']
+            if limit is True:
+                res = HuobiService.sell(HUOBI_COIN_TYPE_LTC, prices, amount, None, None, CNY_MARKET, SELL)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
             else:
-                return -1
+                res = HuobiService.sellMarket(HUOBI_COIN_TYPE_LTC, amount, None, None, CNY_MARKET, SELL_MARKET)
+                if res['result'] == "success":
+                    return res['id']
+                else:
+                    return -1
 
     def buy(self, prices, amount, limit=True):
         if self.subject == CNY_BTC:
@@ -224,8 +255,10 @@ class HuobiExchange:
                 return False
 
     def cancel_all(self):
-        if self.subject == CNY_BTC:
-            pass
+        for order in self.get_orders():
+            self.cancel_order(order.Id)
+
+
 
 
 
@@ -233,7 +266,7 @@ class HuobiExchange:
 
 if __name__ == '__main__':
     exchange = HuobiExchange()
-    exchange.switch_subject(CNY_LTC)
+    exchange.switch_subject(CNY_ETH)
     account_info = exchange.get_account()
     ticker_info = exchange.get_ticker()
     depth_info = exchange.get_depth()
@@ -244,9 +277,14 @@ if __name__ == '__main__':
     for order in orders:
         print(order)
         print(exchange.get_order_info(order.Id))
+
     id = exchange.buy(1, 0.01)
     print(exchange.get_order_info(id))
-
+    exchange.cancel_all()
+    orders = exchange.get_orders()
+    for order in orders:
+        print(order)
+        print(exchange.get_order_info(order.Id))
 
 
 

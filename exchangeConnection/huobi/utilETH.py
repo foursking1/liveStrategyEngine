@@ -18,8 +18,10 @@ import requests
 
 # 此处填写APIKEY
 
-ACCESS_KEY = ""
-SECRET_KEY = ""
+import accountConfig
+
+ACCESS_KEY = accountConfig.HUOBI["CNY_1"]["ACCESS_KEY"]
+SECRET_KEY = accountConfig.HUOBI["CNY_1"]["SECRET_KEY"]
 
 
 # API 请求地址

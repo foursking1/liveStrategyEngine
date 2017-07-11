@@ -5,8 +5,8 @@
 # @Link    : https://www.huobi.com
 # @Version : $Id$
 
-from utilETH import *
-import huobiServiceETH
+from exchangeConnection.huobi.utilETH import *
+from exchangeConnection.huobi import huobiServiceETH
 
 if __name__ == '__main__':
     # print("获取1分钟线")
@@ -18,7 +18,9 @@ if __name__ == '__main__':
     # print("获取 Market Detail 24小时成交量数据")
     # print(huobiServiceETH.get_detail('ethcny'))
     print("获取当前账户资产")
+    print(huobiServiceETH.get_accounts())
     print(huobiServiceETH.get_balance())
+    print(type(huobiServiceETH.get_balance()['data']['list']))
     # print('下单')
     # print(huobiServiceETH.orders(1, 'api', 'ethcny', 'buy-limit', 12))
     # print('执行订单')
