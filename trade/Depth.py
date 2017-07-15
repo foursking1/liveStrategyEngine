@@ -7,6 +7,12 @@ class Depth(object):
     Bids = []
     Asks = []
 
+    def __init__(self, bids, asks):
+        #bids = map(lambda x: float(x), bids)
+        #asks = map(lambda x: float(x), asks)
+        self.Bids = bids
+        self.Asks = asks
+
     def __str__(self):
         bids_length = len(self.Bids)
         asks_length = len(self.Asks)
