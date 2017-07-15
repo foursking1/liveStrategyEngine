@@ -11,8 +11,14 @@ class Account(object):
     FrozenBalance = 0.0
     FrozenStocks = 0.0
 
+    def __init__(self, Balance, Stocks, FrozenBalance, FrozenStocks):
+        self.Balance = float(Balance)
+        self.Stocks = float(Stocks)
+        self.FrozenBalance = float(FrozenBalance)
+        self.FrozenStocks = float(FrozenStocks)
+
     def __str__(self):
-        return("法币%s,  股票 %s， 冻结的法币%s,  冻结的股票%s" %
+        return("法币%f,  股票 %f， 冻结的法币%f,  冻结的股票%f" %
                (self.Balance, self.Stocks, self.FrozenBalance, self.FrozenStocks))
 
 

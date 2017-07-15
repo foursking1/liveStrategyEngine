@@ -11,6 +11,20 @@ from exchangeConnection.huobi.utilETH import *
 Market data API
 '''
 
+# 获取聚合行情
+def get_ticker(symbol):
+    """
+    :param symbol: 可选值：{ ethcny }
+
+    :param period: 可选值：{1min, 5min, 15min, 30min, 60min, 1day, 1mon, 1week, 1year }
+    :param long_polling: 可选值： { true, false }
+    :return:
+    """
+    params = {'symbol': symbol}
+    url = MARKET_URL + '/market/detail/merged'
+    return http_get_request(url, params)
+
+
 
 # 获取KLine
 def get_kline(symbol, period, long_polling=None):

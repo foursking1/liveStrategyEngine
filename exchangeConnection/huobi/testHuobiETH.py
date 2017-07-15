@@ -17,6 +17,7 @@ if __name__ == '__main__':
     # print(huobiServiceETH.get_trade('ethcny'))
     # print("获取 Market Detail 24小时成交量数据")
     # print(huobiServiceETH.get_detail('ethcny'))
+    print(huobiServiceETH.get_ticker('ethcny'))
     print("获取当前账户资产")
     print(huobiServiceETH.get_accounts())
     print(huobiServiceETH.get_balance())

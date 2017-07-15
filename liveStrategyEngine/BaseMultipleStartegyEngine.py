@@ -52,7 +52,6 @@ class BaseMultiLiveStrategyEngine(object):
         self.time = Time(self.startRunningTime)
 
         self.exchanges = exchanges
-
         # setup handle_data
         self.handle_data = self.strat.handle_data
 
