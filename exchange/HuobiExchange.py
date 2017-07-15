@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __author__ = 'foursking'
 from exchange.subject import *
+from exchange.Exchange import Exchange
 from trade.Account import Account
 from trade.Ticker import Ticker
 from trade.Depth import Depth
@@ -14,7 +15,7 @@ from exchangeConnection.huobi.utilETH import *
 from utils.helper import *
 
 
-class HuobiExchange:
+class HuobiExchange():
 
     subject = CNY_BTC
     platform = "huobi"

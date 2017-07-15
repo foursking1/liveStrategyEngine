@@ -10,7 +10,6 @@ if __name__ == "__main__":
 
     # 请不要跑userStrategy里面的策略，因为历史数据现在是Mock出来的
 
-
     '''
     #simpleMA
     strat = BaseLiveStrategyEngine( SimpleMA,datetime.datetime.now(), 0.1, 30, dailyExitTime="23:30:00")
