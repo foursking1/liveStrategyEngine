@@ -9,6 +9,7 @@ from trade.MarketOrder import MarketOrder
 from trade.Order import *
 from trade.Trade import *
 
+
 class OkCoinExchangeSpot(Exchange):
 
     subject = CNY_BTC
