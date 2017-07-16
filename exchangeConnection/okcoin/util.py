@@ -19,3 +19,8 @@ def getOkcoinSpot():
 # 期货API
 def getOkcoinFuture():
     return OKCoinFuture(SERVICE_API, ACCESS_KEY, SECRET_KEY)
+
+
+OKCOIN_COIN_TYPE_BTC = "btc_cny"
+OKCOIN_COIN_TYPE_LTC = "btc_ltc"
+OKCOIN_COIN_TYPE_ETH = "btc_eth"

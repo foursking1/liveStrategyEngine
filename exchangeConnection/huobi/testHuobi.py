@@ -24,7 +24,7 @@ if __name__ == "__main__":
     # print (t['ticker']['sell'])
 
     print("get depth")
-    print(HuobiService.getDepth(HUOBI_COIN_TYPE_BTC, "cny", depth_size=1))
+    print(HuobiService.getDepth(HUOBI_COIN_TYPE_BTC, "cny", depth_size=5))
 
     print('order execution status')
     print(HuobiService.getOrderInfo(HUOBI_COIN_TYPE_LTC, 326711967, "cny", ORDER_INFO))

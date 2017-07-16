@@ -65,6 +65,7 @@ def handle_data(context):
         context.log.info("已触发止盈线, 此bar不会有任何指令 ... ")
         return
 
+
     # 检查是否到达止损线或者止盈线
     if context.account.huobi_cny_net < context.user_data.portfolio_stop_loss * context.account_initial.huobi_cny_net or context.account.huobi_cny_net > context.user_data.portfolio_stop_win * context.account_initial.huobi_cny_net:
         should_stopped = True

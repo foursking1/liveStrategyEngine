@@ -29,6 +29,7 @@ print(u' 现货订单信息查询 ')
 print(type(okcoinSpot.orderInfo('btc_cny', '6122509921')))
 print(okcoinSpot.orderInfo('btc_cny', '6122509921'))
 
+
 print(u' 现货下单 ')
 # print (okcoinSpot.trade('btc_cny','buy_market','50'))
 
@@ -37,8 +38,8 @@ print(type(okcoinSpot.userInfo()))
 print(okcoinSpot.userInfo())
 
 
-# print (u' 现货历史交易信息 ')
-# print (okcoinSpot.trades())
+print (u' 现货历史交易信息 ')
+print (okcoinSpot.trades("btc_cny"))
 
 # print (u' 用户现货账户信息 ')
 # print (okcoinSpot.userInfo())

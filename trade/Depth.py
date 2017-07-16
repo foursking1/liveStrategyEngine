@@ -8,8 +8,6 @@ class Depth(object):
     Asks = []
 
     def __init__(self, bids, asks):
-        #bids = map(lambda x: float(x), bids)
-        #asks = map(lambda x: float(x), asks)
         self.Bids = bids
         self.Asks = asks
 

@@ -30,16 +30,22 @@ class Exchange(object):
     def get_records(self):
         raise NotImplementedError
 
-    def buy(self):
+    def buy(self,price, amount, limit):
         raise NotImplementedError
 
-    def sell(self):
+    def sell(self, price, amount, limit):
         raise NotImplementedError
 
     def get_orders(self):
         raise NotImplementedError
 
-    def cancel_order(self):
+    def get_order_info(self, order_id):
+        raise NotImplementedError
+
+    def cancel_order(self, id):
+        raise NotImplementedError
+
+    def cancel_all(self):
         raise NotImplementedError
 
     def get_min_stock(self):
