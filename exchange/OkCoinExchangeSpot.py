@@ -8,6 +8,7 @@ from trade.Depth import Depth
 from trade.MarketOrder import MarketOrder
 from trade.Order import *
 from trade.Trade import *
+from exchange.config import *
 
 
 class OkCoinExchangeSpot(Exchange):

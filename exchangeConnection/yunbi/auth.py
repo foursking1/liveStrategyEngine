@@ -10,7 +10,7 @@ class Auth():
 
     def urlencode(self, params):
         keys = params.keys()
-        keys.sort()
+        keys = sorted(keys)
         query = ''
         for key in keys:
             value = params[key]
@@ -30,7 +30,12 @@ class Auth():
     def sign(self, verb, path, params=None):
         query = self.urlencode(params)
         msg = "|".join([verb, path, query])
-        signature = hmac.new(self.secret_key, msg=msg, digestmod=hashlib.sha256).hexdigest()
+        #
+        payload = msg.encode(encoding='UTF8')
+        secret_key = self.secret_key.encode(encoding='UTF8')
+        signature = hmac.new(secret_key, msg=payload, digestmod=hashlib.sha256).hexdigest()
+
+        #signature = hmac.new(self.secret_key, msg=msg, digestmod=hashlib.sha256).hexdigest()
         return signature
 
     def sign_params(self, verb, path, params=None):
@@ -40,3 +45,15 @@ class Auth():
         query = self.urlencode(params)
         signature = self.sign(verb, path, params)
         return signature, query
+
+    # def createSign(pParams, method, host_url, request_path, secret_key):
+    #     sorted_params = sorted(pParams.items(), key=lambda d: d[0], reverse=False)
+    #     encode_params = urllib.parse.urlencode(sorted_params)
+    #     payload = [method, host_url, request_path, encode_params]
+    #     payload = '\n'.join(payload)
+    #     payload = payload.encode(encoding='UTF8')
+    #     secret_key = secret_key.encode(encoding='UTF8')
+    #     digest = hmac.new(secret_key, payload, digestmod=hashlib.sha256).digest()
+    #     signature = base64.b64encode(digest)
+    #     signature = signature.decode()
+    #     return signature
